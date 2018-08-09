@@ -1,0 +1,6 @@
+rm /etc/banner.txt
+wget -O /etc/banner.txt "https://raw.githubusercontent.com/vorknes/forvps/master/banner.txt"
+sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
+sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/banner.txt"@g' /etc/default/dropbear
+service ssh restart
+service dropbear restart
