@@ -22,7 +22,7 @@ usage() {
 
 set_var() {
     _SCRIPT_PATH=$(dirname "$0")
-    _POSTFIX="_obfuscated"
+    _POSTFIX="_zan"
 }
 
 set_args() {
