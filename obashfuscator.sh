@@ -1,100 +1,44 @@
-#!/usr/bin/env bash
-#
-# Obfuscate bash script
-#
-#/ Usage:
-#/   ./obashfuscator.sh -f <bash_script> [-n <num>] [-e]
-#/
-#/ Options:
-#/   -f <bash_script>   Input script to obfuscate
-#/   -n <num>           Optional, num of times for base64 encoding
-#/                      If not set, 1 by default
-#/   -e                 Optional, extended mode
-#/                      Use bash-obfuscate on top, by default not
-#/   -h | --help        Display this help message
-
-set -e
-set -u
-
-usage() {
-    printf "%b\n" "$(grep '^#/' "$0" | cut -c4-)" && exit 1
-}
-
-set_var() {
-    _SCRIPT_PATH=$(dirname "$0")
-    _POSTFIX="_zan"
-}
-
-set_args() {
-    expr "$*" : ".*--help" > /dev/null && usage
-    _EXTENDED_MODE=false
-    while getopts ":hf:n:e" opt; do
-        case $opt in
-            f)
-                _BASH_SCRIPT_FILE="$OPTARG"
-                _BASH_SCRIPT_FILE_NAME="$(basename -- "$_BASH_SCRIPT_FILE")"
-                ;;
-            n)
-                _ENCODING_TIME="$OPTARG"
-                ;;
-            e)
-                _EXTENDED_MODE=true
-                _OBFUSCATE_CMD="$(command -v bash-obfuscate)" || (echo "[ERROR] bash-obfuscate command not found!" >&2; exit 1)
-                ;;
-            h)
-                usage
-                ;;
-            \?)
-                echo "[ERROR] Invalid option: -$OPTARG" >&2
-                usage
-                ;;
-        esac
-    done
-}
-
-check_args() {
-    if [[ -z "${_BASH_SCRIPT_FILE:-}" ]]; then
-        echo "[ERROR] Input bash script is not defined: -f <bash_script>" && usage
-    fi
-}
-
-encode_base64() {
-    # $1: bash script
-    # $2: num of times for encoding
-    local t n
-    [[ ! -f "$1" ]] && echo "[ERROR] $1 doesn't exist!" >&2 && exit 1
-    [[ -z "${2:-}" ]] && n=1 || n="$2"
-
-    t=$(sed -E '/^$/d' "$1")
-
-    for (( i = 0; i < n; i++ )); do
-        echo "[INFO] base64 encoding $((i+1))..." >&2
-        t=$(base64 <<< "$t")
-        t="bash -c \"\$(base64 -d <<< \"\\
-"$t"\")\" bash \"\$@\""
-    done
-
-    echo "$t"
-}
-
-obfuscate_script() {
-    # $1: bash script
-    echo "[INFO] Running bash-obfuscate..." >&2
-    $_OBFUSCATE_CMD -o "$1" "$1"
-}
-
-main() {
-    set_args "$@"
-    check_args
-    set_var
-
-    local f
-    f="${_SCRIPT_PATH}/${_BASH_SCRIPT_FILE_NAME%.*}${_POSTFIX}.sh"
-    encode_base64 "$_BASH_SCRIPT_FILE" "${_ENCODING_TIME:-}" > "$f"
-    "$_EXTENDED_MODE" && obfuscate_script "$f"
-    chmod +x "$f"
-}
-
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
-fi
+bash -c "$(base64 -d <<< "\
+IyEvdXNyL2Jpbi9lbnYgYmFzaAojCiMgT2JmdXNjYXRlIGJhc2ggc2NyaXB0CiMKIy8gVXNhZ2U6
+CiMvICAgLi9vYmFzaGZ1c2NhdG9yLnNoIC1mIDxiYXNoX3NjcmlwdD4gWy1uIDxudW0+XSBbLWVd
+CiMvCiMvIE9wdGlvbnM6CiMvICAgLWYgPGJhc2hfc2NyaXB0PiAgIElucHV0IHNjcmlwdCB0byBv
+YmZ1c2NhdGUKIy8gICAtbiA8bnVtPiAgICAgICAgICAgT3B0aW9uYWwsIG51bSBvZiB0aW1lcyBm
+b3IgYmFzZTY0IGVuY29kaW5nCiMvICAgICAgICAgICAgICAgICAgICAgIElmIG5vdCBzZXQsIDEg
+YnkgZGVmYXVsdAojLyAgIC1lICAgICAgICAgICAgICAgICBPcHRpb25hbCwgZXh0ZW5kZWQgbW9k
+ZQojLyAgICAgICAgICAgICAgICAgICAgICBVc2UgYmFzaC1vYmZ1c2NhdGUgb24gdG9wLCBieSBk
+ZWZhdWx0IG5vdAojLyAgIC1oIHwgLS1oZWxwICAgICAgICBEaXNwbGF5IHRoaXMgaGVscCBtZXNz
+YWdlCnNldCAtZQpzZXQgLXUKdXNhZ2UoKSB7CiAgICBwcmludGYgIiViXG4iICIkKGdyZXAgJ14j
+LycgIiQwIiB8IGN1dCAtYzQtKSIgJiYgZXhpdCAxCn0Kc2V0X3ZhcigpIHsKICAgIF9TQ1JJUFRf
+UEFUSD0kKGRpcm5hbWUgIiQwIikKICAgIF9QT1NURklYPSJfemFuIgp9CnNldF9hcmdzKCkgewog
+ICAgZXhwciAiJCoiIDogIi4qLS1oZWxwIiA+IC9kZXYvbnVsbCAmJiB1c2FnZQogICAgX0VYVEVO
+REVEX01PREU9ZmFsc2UKICAgIHdoaWxlIGdldG9wdHMgIjpoZjpuOmUiIG9wdDsgZG8KICAgICAg
+ICBjYXNlICRvcHQgaW4KICAgICAgICAgICAgZikKICAgICAgICAgICAgICAgIF9CQVNIX1NDUklQ
+VF9GSUxFPSIkT1BUQVJHIgogICAgICAgICAgICAgICAgX0JBU0hfU0NSSVBUX0ZJTEVfTkFNRT0i
+JChiYXNlbmFtZSAtLSAiJF9CQVNIX1NDUklQVF9GSUxFIikiCiAgICAgICAgICAgICAgICA7Owog
+ICAgICAgICAgICBuKQogICAgICAgICAgICAgICAgX0VOQ09ESU5HX1RJTUU9IiRPUFRBUkciCiAg
+ICAgICAgICAgICAgICA7OwogICAgICAgICAgICBlKQogICAgICAgICAgICAgICAgX0VYVEVOREVE
+X01PREU9dHJ1ZQogICAgICAgICAgICAgICAgX09CRlVTQ0FURV9DTUQ9IiQoY29tbWFuZCAtdiBi
+YXNoLW9iZnVzY2F0ZSkiIHx8IChlY2hvICJbRVJST1JdIGJhc2gtb2JmdXNjYXRlIGNvbW1hbmQg
+bm90IGZvdW5kISIgPiYyOyBleGl0IDEpCiAgICAgICAgICAgICAgICA7OwogICAgICAgICAgICBo
+KQogICAgICAgICAgICAgICAgdXNhZ2UKICAgICAgICAgICAgICAgIDs7CiAgICAgICAgICAgIFw/
+KQogICAgICAgICAgICAgICAgZWNobyAiW0VSUk9SXSBJbnZhbGlkIG9wdGlvbjogLSRPUFRBUkci
+ID4mMgogICAgICAgICAgICAgICAgdXNhZ2UKICAgICAgICAgICAgICAgIDs7CiAgICAgICAgZXNh
+YwogICAgZG9uZQp9CmNoZWNrX2FyZ3MoKSB7CiAgICBpZiBbWyAteiAiJHtfQkFTSF9TQ1JJUFRf
+RklMRTotfSIgXV07IHRoZW4KICAgICAgICBlY2hvICJbRVJST1JdIElucHV0IGJhc2ggc2NyaXB0
+IGlzIG5vdCBkZWZpbmVkOiAtZiA8YmFzaF9zY3JpcHQ+IiAmJiB1c2FnZQogICAgZmkKfQplbmNv
+ZGVfYmFzZTY0KCkgewogICAgIyAkMTogYmFzaCBzY3JpcHQKICAgICMgJDI6IG51bSBvZiB0aW1l
+cyBmb3IgZW5jb2RpbmcKICAgIGxvY2FsIHQgbgogICAgW1sgISAtZiAiJDEiIF1dICYmIGVjaG8g
+IltFUlJPUl0gJDEgZG9lc24ndCBleGlzdCEiID4mMiAmJiBleGl0IDEKICAgIFtbIC16ICIkezI6
+LX0iIF1dICYmIG49MSB8fCBuPSIkMiIKICAgIHQ9JChzZWQgLUUgJy9eJC9kJyAiJDEiKQogICAg
+Zm9yICgoIGkgPSAwOyBpIDwgbjsgaSsrICkpOyBkbwogICAgICAgIGVjaG8gIltJTkZPXSBiYXNl
+NjQgZW5jb2RpbmcgJCgoaSsxKSkuLi4iID4mMgogICAgICAgIHQ9JChiYXNlNjQgPDw8ICIkdCIp
+CiAgICAgICAgdD0iYmFzaCAtYyBcIlwkKGJhc2U2NCAtZCA8PDwgXCJcXAoiJHQiXCIpXCIgYmFz
+aCBcIlwkQFwiIgogICAgZG9uZQogICAgZWNobyAiJHQiCn0Kb2JmdXNjYXRlX3NjcmlwdCgpIHsK
+ICAgICMgJDE6IGJhc2ggc2NyaXB0CiAgICBlY2hvICJbSU5GT10gUnVubmluZyBiYXNoLW9iZnVz
+Y2F0ZS4uLiIgPiYyCiAgICAkX09CRlVTQ0FURV9DTUQgLW8gIiQxIiAiJDEiCn0KbWFpbigpIHsK
+ICAgIHNldF9hcmdzICIkQCIKICAgIGNoZWNrX2FyZ3MKICAgIHNldF92YXIKICAgIGxvY2FsIGYK
+ICAgIGY9IiR7X1NDUklQVF9QQVRIfS8ke19CQVNIX1NDUklQVF9GSUxFX05BTUUlLip9JHtfUE9T
+VEZJWH0uc2giCiAgICBlbmNvZGVfYmFzZTY0ICIkX0JBU0hfU0NSSVBUX0ZJTEUiICIke19FTkNP
+RElOR19USU1FOi19IiA+ICIkZiIKICAgICIkX0VYVEVOREVEX01PREUiICYmIG9iZnVzY2F0ZV9z
+Y3JpcHQgIiRmIgogICAgY2htb2QgK3ggIiRmIgp9CmlmIFtbICIke0JBU0hfU09VUkNFWzBdfSIg
+PT0gIiR7MH0iIF1dOyB0aGVuCiAgICBtYWluICIkQCIKZmkK")" bash "$@"
