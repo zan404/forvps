@@ -125,7 +125,7 @@ if (@fopen('auth.txt', 'r')) {
 	echo "\n";
 
 	repeat_otp:
-	echo "$yellow"."【+】Input Kode OTP : ";
+	echo "$yellow"."【+】Input Kode OTP   : ";
 	$otp = strtoupper(trim(fgets(STDIN)));
 	$response = $axis->sendLogin($nomor, $otp);
 	$result = json_decode($response, true);
