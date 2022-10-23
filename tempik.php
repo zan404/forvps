@@ -105,12 +105,12 @@ if (@fopen('auth.txt', 'r')) {
 	profile:
 	echo "\n";
 	echo "$blue ============================\n";
-	echo "$White 🌀 Nama\t : M Fauzan \n";
-	echo "$White 🌀 Tanggal\t : ".date('Y-m-d')." \n";
+	echo "$White √ Author\t : zan404 \n";
+	echo "$White √ Tanggal\t : ".date('Y-m-d')." \n";
 	echo "$blue ============================\n";
 
 	repeat_msisdn:
-	echo "$yellow"."【+】Masukkan Nomor Axis : ";
+	echo "$yellow"."Input Nomor Axis : ";
 	$nomor = trim(fgets(STDIN));
 	$response = $axis->SendOTP($nomor);
 	$result = json_decode($response, true);
@@ -125,7 +125,7 @@ if (@fopen('auth.txt', 'r')) {
 	echo "\n";
 
 	repeat_otp:
-	echo "$yellow"."【+】Masukkan Kode OTP : ";
+	echo "$yellow"."Input Kode OTP : ";
 	$otp = strtoupper(trim(fgets(STDIN)));
 	$response = $axis->sendLogin($nomor, $otp);
 	$result = json_decode($response, true);
@@ -160,7 +160,7 @@ function BuyPackage()
 	echo "$White  •  Nomor Axis\t\t : " . "" .$data['msisdn']. "" . "\n";
 	echo "$White  •  Auth Token\t : " . "" . trim($axis->authToken()) . "" . "\n";
 	echo "$White  •  Balance\t : " . "Rp. ". number_format($data['result']['balance'], 0,',','.')."" . "\n";
-	echo "$White  •  Exp\t\t : " . "". $data['result']['activestopdate']."" . "\n\n";
+	echo "$White  •  Masa Aktif\t\t : " . "". $data['result']['activestopdate']."" . "\n\n";
 	echo "$Yellow"."[ ~ ] Daftar Kuota Gratis Harian: \n";
 
 	$daftar = $axis->getListPackageV2();
@@ -169,7 +169,7 @@ function BuyPackage()
 		echo "$White"."$list \n";
 	}
 
-	echo "$Cyan"."[ ✓ ]Choise Kuota Harian (Manual ID) : ";
+	echo "$Cyan"."[ ✓ ] Choise Kuota Harian (Manual ID) : ";
 	$choise = trim(fgets(STDIN));
 	$pkgid = $axis->getBuyPackageV2(trim($axis->authToken()), $choise);
 	$result = json_decode($pkgid, true);
