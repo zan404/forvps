@@ -3,7 +3,7 @@ class AxisAPI
 {
 	//function untuk kirim otp
 	function SendOTP($nomor){
-		$url="https://gregi45.000webhostapp.com/dor/otp";
+		$url="https://wdcloudssh.net/api/new/axis/otp";
 		$data=array("msisdn"=> $nomor);
 
 		$curl = curl_init();
@@ -16,7 +16,7 @@ class AxisAPI
 	}
 	//function untuk login
 	function sendLogin($nomor, $otp){
-		$url="https://gregi45.000webhostapp.com/dor/login";
+		$url="https://wdcloudssh.net/api/new/axis/login";
 		$data=array("msisdn" => $nomor, "otp"=> $otp);
 
 		$curl = curl_init();
@@ -29,7 +29,7 @@ class AxisAPI
 	}
 	// Fungsi buy package
 	function getBuyPackageV2($token, $pkgid){
-		$url="https://gregi45.000webhostapp.com/dor/package";
+		$url="https://wdcloudssh.net/api/new/axis/package";
 		$data=array("token"=> $token, "pkgid" => $pkgid);
 
 		$curl = curl_init();
@@ -45,7 +45,7 @@ class AxisAPI
 	{
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-		CURLOPT_URL => 'https://gregi45.000webhostapp.com/dor/list',
+		CURLOPT_URL => 'https://wdcloudssh.net/api/new/axis/list',
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_ENCODING => '',
 		CURLOPT_MAXREDIRS => 10,
@@ -62,7 +62,7 @@ class AxisAPI
 
 	function getBalance($auth)
 	{
-		$url="https://gregi45.000webhostapp.com/dor/getbalance";
+		$url="https://wdcloudssh.net/api/new/axis/getbalance";
 		$data=array("token" => $auth);
 
 		$curl = curl_init();
