@@ -104,13 +104,13 @@ if (@fopen('auth.txt', 'r')) {
 }else{
 	profile:
 	echo "\n";
-	echo "$blue ============================\n";
-	echo "$White • Author\t : ZAN405 \n";
+	echo "$blue ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈\n";
+	echo "$White • Author\t : ZAN404 \n";
 	echo "$White • Tanggal\t : ".date('Y-m-d')." \n";
-	echo "$blue ============================\n";
+	echo "$blue ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈\n";
 
 	repeat_msisdn:
-	echo "$yellow"."【+】Masukkan Nomor Axis : ";
+	echo "$yellow"."【+】Input Nomor Axis : ";
 	$nomor = trim(fgets(STDIN));
 	$response = $axis->SendOTP($nomor);
 	$result = json_decode($response, true);
@@ -125,7 +125,7 @@ if (@fopen('auth.txt', 'r')) {
 	echo "\n";
 
 	repeat_otp:
-	echo "$yellow"."【+】Masukkan Kode OTP : ";
+	echo "$yellow"."【+】Input Kode OTP : ";
 	$otp = strtoupper(trim(fgets(STDIN)));
 	$response = $axis->sendLogin($nomor, $otp);
 	$result = json_decode($response, true);
