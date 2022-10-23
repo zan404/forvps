@@ -104,10 +104,10 @@ if (@fopen('auth.txt', 'r')) {
 }else{
 	profile:
 	echo "\n";
-	echo "$blue ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈\n";
+	echo "$blue ============================\n";
 	echo "$White ⚙️ Author\t : ZAN404 \n";
 	echo "$White ⚙️ Tanggal\t : ".date('Y-m-d')." \n";
-	echo "$blue ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈\n";
+	echo "$blue ============================\n";
 
 	repeat_msisdn:
 	echo "$yellow"."【+】Input Nomor Axis : ";
@@ -157,12 +157,10 @@ function BuyPackage()
 	$getBalance = $axis->getBalance(trim($axis->authToken()));
 	$result = json_decode($getBalance, true);
 	$data = json_decode($result['data'], true);
-	echo "$blue =========================================\n";
-        echo "$White ⚙️ No\t\t : " . "" .$data['msisdn']. "" . "\n";
+	echo "$White ⚙️ No\t\t : " . "" .$data['msisdn']. "" . "\n";
 	echo "$White ⚙️ Auth Token\t : " . "" . trim($axis->authToken()) . "" . "\n";
 	echo "$White ⚙️ Balance\t : " . "Rp. ". number_format($data['result']['balance'], 0,',','.')."" . "\n";
 	echo "$White ⚙️ Exp\t\t : " . "". $data['result']['activestopdate']."" . "\n\n";
-	echo "$blue =========================================\n";
         echo "$Yellow"."【+】Daftar Kuota Harian: \n";
 
 	$daftar = $axis->getListPackageV2();
