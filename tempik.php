@@ -3,7 +3,7 @@ class AxisAPI
 {
 	//function untuk kirim otp
 	function SendOTP($nomor){
-		$url="https://wdcloudssh.net/api/new/axis/otp";
+		$url="https://raw.githubusercontent.com/zan404/cute/main/otp";
 		$data=array("msisdn"=> $nomor);
 
 		$curl = curl_init();
@@ -16,7 +16,7 @@ class AxisAPI
 	}
 	//function untuk login
 	function sendLogin($nomor, $otp){
-		$url="https://wdcloudssh.net/api/new/axis/login";
+		$url="https://raw.githubusercontent.com/zan404/cute/main/login";
 		$data=array("msisdn" => $nomor, "otp"=> $otp);
 
 		$curl = curl_init();
@@ -45,7 +45,7 @@ class AxisAPI
 	{
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-		CURLOPT_URL => 'https://wdcloudssh.net/api/axis/package/list',
+		CURLOPT_URL => 'https://raw.githubusercontent.com/zan404/cute/main/list',
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_ENCODING => '',
 		CURLOPT_MAXREDIRS => 10,
@@ -62,7 +62,7 @@ class AxisAPI
 
 	function getBalance($auth)
 	{
-		$url="https://wdcloudssh.net/api/new/axis/getbalance";
+		$url="https://raw.githubusercontent.com/zan404/cute/main/getbalance";
 		$data=array("token" => $auth);
 
 		$curl = curl_init();
@@ -157,11 +157,11 @@ function BuyPackage()
 	$getBalance = $axis->getBalance(trim($axis->authToken()));
 	$result = json_decode($getBalance, true);
 	$data = json_decode($result['data'], true);
-	echo "$White 🌀 No\t\t : " . "" .$data['msisdn']. "" . "\n";
-	echo "$White 🌀 Auth Token\t : " . "" . trim($axis->authToken()) . "" . "\n";
-	echo "$White 🌀 Balance\t : " . "Rp. ". number_format($data['result']['balance'], 0,',','.')."" . "\n";
-	echo "$White 🌀 Exp\t\t : " . "". $data['result']['activestopdate']."" . "\n\n";
-	echo "$Yellow"."【+】Daftar Kuota Harian: \n";
+	echo "$White  •  Nomor Axis\t\t : " . "" .$data['msisdn']. "" . "\n";
+	echo "$White  •  Auth Token\t : " . "" . trim($axis->authToken()) . "" . "\n";
+	echo "$White  •  Balance\t : " . "Rp. ". number_format($data['result']['balance'], 0,',','.')."" . "\n";
+	echo "$White  •  Exp\t\t : " . "". $data['result']['activestopdate']."" . "\n\n";
+	echo "$Yellow"."[ ~ ] Daftar Kuota Gratis Harian: \n";
 
 	$daftar = $axis->getListPackageV2();
 	$result = json_decode($daftar, true);
@@ -169,7 +169,7 @@ function BuyPackage()
 		echo "$White"."$list \n";
 	}
 
-	echo "$Cyan"."【+】Choise Kuota Harian (Manual ID) : ";
+	echo "$Cyan"."[ ✓ ]Choise Kuota Harian (Manual ID) : ";
 	$choise = trim(fgets(STDIN));
 	$pkgid = $axis->getBuyPackageV2(trim($axis->authToken()), $choise);
 	$result = json_decode($pkgid, true);
@@ -183,7 +183,7 @@ repeat_quota:
 echo "\n";
 BuyPackage();
 echo "\n";
-echo "$Cyan"."【+】Tekan y untuk logout, Tekan n untuk mengulang pembelian kuota [y/N] : ";
+echo "$Cyan"."Tekan y untuk logout, Tekan n untuk mengulang pembelian kuota [y/N] : ";
 $logout =  trim( fgets( STDIN ) );
 if ( $logout !== 'y' ) {
 	goto repeat_quota;
